@@ -1,0 +1,49 @@
+=====================================================
+v1.1.5
+
+1) Add If, IfNot extensions
+2) Add Redirect, Notify to RxVar
+3) Reformat code
+
+=====================================================
+v1.1.4
+
+1) Fixing a bug in BindRxPropertiesToView
+2) Update version in assembly
+
+=====================================================
+v1.1.0
+
+1) Updating signature of BindRxPropertiesToView function
+2) Update Readme.md
+
+=====================================================
+
+v1.0.13
+
+1) Bug fixing and support for TwoWay binding mode of properties
+
+=====================================================
+v1.0.12
+
+1) Use IObservable instead of IRxVar in ToRxProperty methods (there was a typo !!)
+
+=====================================================
+
+v1.0.11
+
+1) Use IObservable instead of IRxVar in ToRxVar and ToRxProperty methods
+2) Fix version number in assembly
+
+=====================================================
+v1.0.10
+
+1) Revert changes made (rollback to version with IConvertible).
+2) Add some extensions and new constructors
+3) Adding Unit Tests
+
+=====================================================
+v1.0.9
+
+1) Removing unnecessary Interfaces and their implementations.
+2) Adding Unit Tests
