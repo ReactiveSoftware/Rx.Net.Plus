@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		History.txt = History.txt
 		License.md = License.md
 		Logo.jpg = Logo.jpg
+		Nugetdoc.md = Nugetdoc.md
 		README.md = README.md
 		Rx.Net.Plus.nuspec = Rx.Net.Plus.nuspec
 		Rx.Net.Plus.png = Rx.Net.Plus.png
