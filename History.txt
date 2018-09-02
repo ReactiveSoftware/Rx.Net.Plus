@@ -1,4 +1,10 @@
 =====================================================
+v1.1.6
+
+1) Add support for serialization
+2) Optimize distinct mode
+
+=====================================================
 v1.1.5
 
 1) Add If, IfNot extensions

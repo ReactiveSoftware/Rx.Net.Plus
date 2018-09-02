@@ -8,16 +8,16 @@ What do we mean?
 
 We would like to:
 
-1. React whenever variables change
+1. Get a notification whenever the value of a regular variable is changed (**push** model vs **pull** model)
 2. Connect variables to observable sources
-3. Not receive notification if same data is set again and again
-4. Continue to use these variables as before. Compare them to values, convert them...
+3. Not receive notification if the data is set with the same value again and again
+4. Continue to use these variables as before by **polling**. Compare them to values, convert them...
 
 **Rx.Net.Plus** is a small but smart library which introduces **two** new types for this purpose (+ several extension methods):
 
 | Type             | Purpose                                                      |
 | :--------------- | ------------------------------------------------------------ |
-| ***RxVar***      | replace regular variables (like int, bool...)                |
+| ***RxVar***      | replace basic types (as int, bool...)                        |
 | ***RxProperty*** | to replace view-model *properties* (*NotifyPropertyChanged* pattern) |
 
 ### RxVar
@@ -164,15 +164,17 @@ By default, **RxVar** propagates its data (on update) only when a new **distinct
 
 That means that if some observer is subscribed to RxVar and the same value is assigned to RxVar, it will not be published.
 
-In order to allow every update to be propagated, RxVar provide the following method:
+In order to allow every update to be propagated, RxVar provide the following property:
 
 ```C#
-SetDistinctMode
+IsDistinctMode
 ```
 
-### **DisposableBaseClass**
+**Note**: *distinct mode* may be changed at any time even after subscription of observers.
 
-**Rx.Net.Plus** provides a base class which implements *IDisposable, called DisposableBaseClass.
+### DisposableBaseClass
+
+**Rx.Net.Plus** provides a base class which implements *IDisposable*, called ***DisposableBaseClass***.
 
 *DisposableBaseClass* has a built-in *CancellationToken* used by RxVar and RxProperty to automatically unsubscribe (in case they are used as observers) on disposing.
 
@@ -189,9 +191,19 @@ rxVar.ListenTo (observable);
 // RxVar is automatically unsubscribed from observable when disposed
 ```
 
+
+
+### Serialization
+
+**RxVar** supports standard serialization (tested for binary, xml, Json).
+
+The following fields are serialized: ***Value, IsDistinct.***
+
+****
+
 ### Limitations
 
-As C# **does not** support overloading of the assignment operator, it is impossible to assign a value directly to a variable.
+As C# **does not** allow overloading of the assignment operator, it is impossible to assign a value directly to a variable.
 
 Therefore the following notation is disallowed:
 

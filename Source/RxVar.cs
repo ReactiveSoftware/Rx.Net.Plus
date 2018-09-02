@@ -2,9 +2,38 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.Serialization;
 
 namespace Rx.Net.Plus
 {
+    internal static class ConversionHelper
+    {
+        public static T ConvertTo<T>(this object value)
+        {
+            // Get the type that was made nullable.
+            var valueType = Nullable.GetUnderlyingType(typeof(T));
+
+            if (valueType != null)
+            {
+                // Nullable type.
+                if (value == null)
+                {
+                    return default(T);
+                }
+                else
+                {
+                    return (T) Convert.ChangeType(value, valueType);
+                }
+            }
+            else
+            {
+                // Not nullable.
+                return (T) Convert.ChangeType(value, typeof(T));
+            }
+        }
+    }
+
+
     /// <summary>
     /// RxVar is basically intended to add Reactive capabilities to
     /// basic types like int, bool...
@@ -25,22 +54,24 @@ namespace Rx.Net.Plus
     ///
 #pragma warning disable CS0660, CS0661
 
+    [Serializable]
     public class RxVar<T> : DisposableBaseClass, IRxVar<T>
     {
         #region Fields
 
         private readonly BehaviorSubject<T> _subject;
         private IObservable<T> _observable;
-        private readonly IObservable<T> _observableWithDistinct;
-        private readonly IObservable<T> _observableWithoutDistinct;
         private IComparer<T> _comparer = Comparer<T>.Default;
 
-        private bool _isDistinct;
         #endregion
 
         #region Constructors
 
         public RxVar() : this(default(T))
+        {
+        }
+
+        public RxVar(object value) : this(value.ConvertTo<T>())
         {
         }
 
@@ -51,13 +82,11 @@ namespace Rx.Net.Plus
         public RxVar(T v)
         {
             _subject = new BehaviorSubject<T>(v);
-            _observableWithoutDistinct = _subject.Synchronize();
-            _observableWithDistinct = _observableWithoutDistinct.DistinctUntilChanged();
-            
-            _isDistinct = false;        // To force distinct mode
-            SetDistinctMode(true);  
+            _observable = _subject.Synchronize();
+            IsDistinctMode = true;  
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create a new instance of RxVar and connect it to another source
         /// </summary>
@@ -91,14 +120,7 @@ namespace Rx.Net.Plus
 
         #region IRxVar Interface
 
-        public void SetDistinctMode(bool isEnabled)
-        {
-            if (isEnabled != _isDistinct)
-            {
-                _isDistinct = isEnabled;
-                _observable = isEnabled ? _observableWithDistinct : _observableWithoutDistinct;
-            }
-        }
+        public bool IsDistinctMode { get; set; }
 
         public T Value
         {
@@ -240,7 +262,20 @@ namespace Rx.Net.Plus
 
         public virtual void OnNext(T value)
         {
-            _subject.OnNext(value);
+            bool publishValue = true;
+
+            if (IsDistinctMode)
+            {
+                if (value.Equals(Value))
+                {
+                    publishValue = false;
+                }
+            }
+
+            if (publishValue)
+            {
+                _subject.OnNext(value);
+            }
         }
 
         public void OnError(Exception error)
@@ -358,11 +393,29 @@ namespace Rx.Net.Plus
         #endregion
 
         #region IDisposable Support
+
         protected override void OnDisposing(bool isDisposing)
         {
             base.OnDisposing(isDisposing);
             _subject.Dispose();
         }
+        
+        #endregion
+
+        #region ISerializable
+
+        public RxVar (SerializationInfo info, StreamingContext context) : this(default(T))
+        {
+            IsDistinctMode = (bool) info.GetValue ("IsDistinctMode", typeof(bool));
+            Value = (T) info.GetValue ("Value", typeof(T));
+        }
+
+        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue ("IsDistinctMode", IsDistinctMode);
+            info.AddValue ("Value", Value);
+        }
+
         #endregion
     }
 }

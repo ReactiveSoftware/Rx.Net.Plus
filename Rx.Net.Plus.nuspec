@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Rx.Net.Plus</id>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <title>ReactiveX Variables</title>
     <authors>Reactive Software</authors>
     <owners>Reactive Software</owners>
@@ -15,8 +15,8 @@
     <copyright>Copyright 2018, Reactive Software</copyright>
     <tags>Reactive, Variable, WPF, .NET, Property, MVVM, NotifyPropertyChanged, Caliburn, LINQ, Events, Rx, Extensions, Observable</tags>
     <dependencies>
-      <dependency id="System.Reactive" version="4.0.0"></dependency>
-      <dependency id="" version="4.0.0"></dependency>
+      <dependency id="System.Reactive" version="3.0.0"></dependency>
+      <dependency id="" version="3.0.0"></dependency>
     </dependencies>
   </metadata>
   <files>

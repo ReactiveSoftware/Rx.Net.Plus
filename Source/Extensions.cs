@@ -82,14 +82,17 @@ namespace Rx.Net.Plus
     /// 1) allow deterministic destruction of objects
     /// 2) provide a built-in CancellationToken to allow Rx unsubscriptions (using CancellationToken)
     /// </summary>
+
     public abstract class DisposableBaseClass : IDisposableBaseClass
     {
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
        
         public CancellationTokenSource CTS => _cts;
+
         public CancellationToken CancellationToken => CTS.Token;
 
-        public bool IsDisposed { get; private set; }
+        private bool _isDisposed = false;
+        public bool IsDisposed => _isDisposed;
 
         //Implement IDisposable.
         public void Dispose()
@@ -108,8 +111,12 @@ namespace Rx.Net.Plus
             if (false == IsDisposed)
             {
                 OnDisposing(isDisposing);
-                IsDisposed = true;
+                _isDisposed = true;
             }
         }
+
+        #region Serialization
+
+        #endregion
     }
 }

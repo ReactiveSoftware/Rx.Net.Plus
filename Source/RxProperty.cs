@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace Rx.Net.Plus
 {
+    [Serializable]
     public class RxProperty<T> : RxVar<T>, IRxProperty<T>
     {
         private IPropertyChangedProxy _parent;

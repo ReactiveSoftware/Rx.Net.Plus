@@ -1,5 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Reactive.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Rx.Net.Plus;
 
@@ -281,7 +286,15 @@ namespace Rx_Tests
             rxVar.Value = false;
 
             Assert.True (counter == 2);
+
+            rxVar.IsDistinctMode = false;
+            rxVar.Value = false;
+            rxVar.Value = false;
+            rxVar.Value = false;
+
+            Assert.True (counter == 5);
         }
+
 
         [Test]
         public void CheckConcurrency()
@@ -333,5 +346,89 @@ namespace Rx_Tests
             rxVar.IfNot(true).Notify(_ => occured = true);
             Assert.True(occured);
         }
+
+        
+        [Serializable]
+        public class User : IEquatable<User>
+        {
+            public RxVar<string> Name = "John".ToRxVar();
+            public RxVar<bool> IsMale = true.ToRxVar();
+            public RxVar<double> Age = 16.5.ToRxVar();
+            public User() { Name.IsDistinctMode = false; }
+
+            public bool Equals(User other)
+            {
+                if (other != null)
+                {
+                    return Name.Equals(other.Name)
+                           &&
+                           IsMale.Equals(other.IsMale)
+                           &&
+                           Age.Equals(other.Age);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        [Test]
+        public void SerializeRxVarXml()
+        {
+            var xmlSerializer = new XmlSerializer(typeof(User));
+
+            var path = @"c:\temp\RxVarTests.xml";
+            var file = File.Create(path);
+
+            var origObject = new User();
+            xmlSerializer.Serialize(file, origObject);
+            file.Close();
+
+            file = File.Open(path, FileMode.Open);
+            var deserializedObject = xmlSerializer.Deserialize(file) as User;
+            
+            Assert.AreEqual(origObject, deserializedObject);
+            
+            file.Close();
+        }
+
+        [Test]
+        public void SerializeRxVarBinary()
+        {
+            IFormatter formatter = new BinaryFormatter();
+
+            Stream stream;
+            using (stream = new FileStream(@"c:\temp\rxvar.bin",
+                FileMode.Create,
+                FileAccess.ReadWrite, FileShare.None))
+            {
+                var origObject = new User();
+                formatter.Serialize(stream, origObject);
+
+                stream.Position = 0;
+                var deserializedObject = formatter.Deserialize(stream) as User;
+                
+                Assert.AreEqual(origObject, deserializedObject);
+            }
+        }
+        
+        [Test]
+        public void SerializeRxVarJson()
+        {
+            var origObject = new User();
+            var serializedObject = JsonConvert.SerializeObject(origObject);
+            var deserializedObject = JsonConvert.DeserializeObject<User>(serializedObject);
+
+            Assert.AreEqual (origObject, deserializedObject);
+        }
+
+        [Test]
+        public void TestInstantationFromObject()
+        {
+            var rxvar = new RxVar<bool>("true");
+            Assert.True(rxvar);
+        }
+        
     }
 }

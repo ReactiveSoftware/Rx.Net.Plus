@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reactive.Subjects;
+using System.Runtime.Serialization;
 using System.Threading;
 
 namespace Rx.Net.Plus
@@ -13,9 +14,14 @@ namespace Rx.Net.Plus
         bool IsDisposed { get; }
     }
 
-    public interface IRxVar<T> : ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable 
+    public interface IRxVar<T> : ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
     {
-        void SetDistinctMode(bool isEnabled);
+        /// <summary>
+        /// Distinct mode indicates that only when a distinct value is
+        /// set to RxVar it is dispatched to observers
+        /// Default value is true => Distinct mode is applied
+        /// </summary>
+        bool IsDistinctMode { get; set; }
         
         T Value { get; set; }
         T Set(T v);

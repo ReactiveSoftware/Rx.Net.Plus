@@ -55,6 +55,7 @@
     <Reference Include="System" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -63,11 +64,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.10.1</Version>
     </PackageReference>
     <PackageReference Include="System.Reactive">
-      <Version>4.0.0</Version>
+      <Version>3.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
