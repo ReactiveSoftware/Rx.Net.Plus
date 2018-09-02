@@ -195,11 +195,9 @@ rxVar.ListenTo (observable);
 
 ### Serialization
 
-**RxVar** supports standard serialization (tested for binary, xml, Json).
+**RxVar** supports standard serialization (have been tested for binary, xml, Json formats).
 
 The following fields are serialized: ***Value, IsDistinct.***
-
-****
 
 ### Limitations
 
