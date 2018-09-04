@@ -17,7 +17,7 @@
     <tags>System.Reactive Reactive Json Rx.Net.Plus rx-main</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="11.0.2"></dependency>
-      <dependency id="Rx.Net.Plus" version="1.1.7"></dependency>
+      <dependency id="Rx.Net.Plus" version="1.1.8"></dependency>
     </dependencies>
   </metadata>
   <files>
