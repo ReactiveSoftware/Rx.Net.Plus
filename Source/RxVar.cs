@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.Serialization;
 
@@ -46,6 +45,7 @@ namespace Rx.Net.Plus
     ///     RxVar<bool> isConnected = false;
     ///     isConnected.Subscribe (val => Console.WriteLine ($" Value is {val} "));     // Outputs false to screen
     ///     isConnected.Value = true;            // Outputs true to screen
+    ///  RxVar are thread safe (based on BehaviorSubject)
     ///  </summary>
     /// <example>
     /// RxVar<bool> isConnected = false;
@@ -60,7 +60,7 @@ namespace Rx.Net.Plus
         #region Fields
 
         private readonly BehaviorSubject<T> _subject;
-        private IObservable<T> _observable;
+        private readonly IObservable<T> _observable;
         private IComparer<T> _comparer = Comparer<T>.Default;
 
         #endregion
@@ -82,7 +82,7 @@ namespace Rx.Net.Plus
         public RxVar(T v)
         {
             _subject = new BehaviorSubject<T>(v);
-            _observable = _subject.Synchronize();
+            _observable = _subject;
             IsDistinctMode = true;  
         }
 
@@ -124,11 +124,17 @@ namespace Rx.Net.Plus
 
         public T Value
         {
-            get => IsDisposed 
-                    ?
-                        default(T)
-                    :
-                        _subject.Value;
+            get
+            {
+                T retValue = default(T);
+
+                if (!IsDisposed)
+                {
+                    _subject.TryGetValue(out retValue);
+                }
+                
+                return retValue;
+            }
 
             set => OnNext(value);
         }
@@ -157,24 +163,29 @@ namespace Rx.Net.Plus
             return left.Value.Equals(right.Value);
         }
 
-        public virtual bool Equals(RxVar<T> other)
+        public bool Equals(RxVar<T> other)
         {
             return Equals((object) other);
         }
 
-        public virtual bool Equals(T other)
+        public bool Equals(T other)
         {
             return this.Value.Equals(other);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object other)
         {
-            if (obj is IRxVar<T>)
+            switch (other)
             {
-                return EqualsInternal(this, (RxVar<T>) obj);
+                case null:
+                    return base.Equals(other);
+                case IRxVar<T> rxvar:
+                    return EqualsInternal(this, rxvar as RxVar<T>);
+                case T val:
+                    return Value.Equals(val);
+                default:
+                    return false;
             }
-
-            return false;
         }
 
         public override int GetHashCode()
@@ -303,7 +314,13 @@ namespace Rx.Net.Plus
         }
 
         #endregion
+
+        #region IAsObject interface
         
+        object IAsObject.AsObject => (object) Value;
+
+        #endregion
+
         #region IConvertible
 
         public TypeCode GetTypeCode()
@@ -399,7 +416,7 @@ namespace Rx.Net.Plus
             base.OnDisposing(isDisposing);
             _subject.Dispose();
         }
-        
+
         #endregion
 
         #region ISerializable

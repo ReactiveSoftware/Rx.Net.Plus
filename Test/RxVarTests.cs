@@ -11,13 +11,13 @@ using Rx.Net.Plus;
 namespace Rx_Tests
 {
     [TestFixture]
-    public class RxVarTests
+    public partial class RxVarTests
     {
         [Test]
         public void BasicConstruction()
         {
             var rxVar = false.ToRxVar();
-           
+
             Assert.IsFalse(rxVar);
         }
 
@@ -55,7 +55,7 @@ namespace Rx_Tests
 
             Assert.IsTrue(rxVar1.CompareTo(false) == 0);
         }
-        
+
         [Test]
         public void CompareTwoRxVars()
         {
@@ -122,6 +122,16 @@ namespace Rx_Tests
         }
 
         [Test]
+        public void EqualsWithObject()
+        {
+            var rxVar1 = false.ToRxVar();
+            var rxVar2 = false.ToRxVar();
+
+            Assert.True(rxVar1.Equals((object) rxVar2));
+            Assert.True(rxVar1.Equals((object) false));
+        }
+
+        [Test]
         public void EqualsOperatorWithValue()
         {
             var rxVar1 = false.ToRxVar();
@@ -161,7 +171,7 @@ namespace Rx_Tests
         {
             var rxVar = false.ToRxVar();
             var rxVar2 = true.ToRxVar();
-            
+
             rxVar.Value = rxVar2;
             Assert.IsTrue(rxVar);
         }
@@ -171,7 +181,7 @@ namespace Rx_Tests
         {
             var rxVar = false.ToRxVar();
             bool recipient = true;
-            rxVar.Subscribe (value => recipient = value);
+            rxVar.Subscribe(value => recipient = value);
 
             Assert.IsFalse(recipient);
         }
@@ -182,7 +192,7 @@ namespace Rx_Tests
             var rxVar = false.ToRxVar();
 
             bool recipient = true;
-            
+
             rxVar
                 .Do(val => TestContext.WriteLine($"Value is: {val}"))
                 .Subscribe(value => recipient = value);
@@ -223,11 +233,11 @@ namespace Rx_Tests
             var rxVar = false.ToRxVar();
 
             int counter = 0;
-    
+
             rxVar
                 .Subscribe(_ =>
                 {
-                    ++counter;            // Count the total changes of rxVar
+                    ++counter; // Count the total changes of rxVar
                     TestContext.WriteLine($"Outside counter: {counter}");
                 });
 
@@ -253,8 +263,8 @@ namespace Rx_Tests
 
             rxVar.Value ^= true;
 
-            Assert.True (counterRecipient == 2);       // Since  rxVarRecipient is disposed
-            Assert.True (counter == 3);
+            Assert.True(counterRecipient == 2); // Since  rxVarRecipient is disposed
+            Assert.True(counter == 3);
         }
 
         [Test]
@@ -267,7 +277,7 @@ namespace Rx_Tests
             rxVar
                 .Subscribe(_ =>
                 {
-                    ++counter;            // Count the total changes of rxVar
+                    ++counter; // Count the total changes of rxVar
                     TestContext.WriteLine($"Counter: {counter}");
                 });
 
@@ -278,21 +288,21 @@ namespace Rx_Tests
             rxVar.Value = false;
             rxVar.Value = false;
             rxVar.Value = false;
-            
+
             rxVar.Value = true;
             rxVar.Value = true;
             rxVar.Value = true;
 
             rxVar.Value = false;
 
-            Assert.True (counter == 2);
+            Assert.True(counter == 2);
 
             rxVar.IsDistinctMode = false;
             rxVar.Value = false;
             rxVar.Value = false;
             rxVar.Value = false;
 
-            Assert.True (counter == 5);
+            Assert.True(counter == 5);
         }
 
 
@@ -306,7 +316,7 @@ namespace Rx_Tests
             rxVar
                 .Subscribe(_ =>
                 {
-                    ++counter;            // Count the total changes of rxVar
+                    ++counter; // Count the total changes of rxVar
                     TestContext.WriteLine($"Counter: {counter}");
                 });
 
@@ -317,14 +327,14 @@ namespace Rx_Tests
             rxVar.Value = false;
             rxVar.Value = false;
             rxVar.Value = false;
-            
+
             rxVar.Value = true;
             rxVar.Value = true;
             rxVar.Value = true;
 
             rxVar.Value = false;
 
-            Assert.True (counter == 2);
+            Assert.True(counter == 2);
         }
 
         [Test]
@@ -336,7 +346,7 @@ namespace Rx_Tests
 
             rxVar.When(true).Notify(_ => occured = true);
             Assert.False(occured);
-            
+
             rxVar.When(false).Notify(_ => occured = true);
             Assert.True(occured);
 
@@ -345,32 +355,6 @@ namespace Rx_Tests
 
             rxVar.IfNot(true).Notify(_ => occured = true);
             Assert.True(occured);
-        }
-
-        
-        [Serializable]
-        public class User : IEquatable<User>
-        {
-            public RxVar<string> Name = "John".ToRxVar();
-            public RxVar<bool> IsMale = true.ToRxVar();
-            public RxVar<double> Age = 16.5.ToRxVar();
-            public User() { Name.IsDistinctMode = false; }
-
-            public bool Equals(User other)
-            {
-                if (other != null)
-                {
-                    return Name.Equals(other.Name)
-                           &&
-                           IsMale.Equals(other.IsMale)
-                           &&
-                           Age.Equals(other.Age);
-                }
-                else
-                {
-                    return false;
-                }
-            }
         }
 
         [Test]
@@ -383,11 +367,15 @@ namespace Rx_Tests
 
             var origObject = new User();
             xmlSerializer.Serialize(file, origObject);
+
             file.Close();
+
+            TestContext.WriteLine($"Xml Serializing Output: \n{File.ReadAllText(path)}");
 
             file = File.Open(path, FileMode.Open);
             var deserializedObject = xmlSerializer.Deserialize(file) as User;
-            
+
+            bool areEqual = origObject.Equals(deserializedObject);
             Assert.AreEqual(origObject, deserializedObject);
             
             file.Close();
@@ -412,12 +400,19 @@ namespace Rx_Tests
                 Assert.AreEqual(origObject, deserializedObject);
             }
         }
-        
+ 
         [Test]
         public void SerializeRxVarJson()
         {
             var origObject = new User();
-            var serializedObject = JsonConvert.SerializeObject(origObject);
+
+            var serializedObject = JsonConvert.SerializeObject(origObject, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Serialize
+            });
+            
+            TestContext.WriteLine($"Json Serializing Output: \n{serializedObject}");
+
             var deserializedObject = JsonConvert.DeserializeObject<User>(serializedObject);
 
             Assert.AreEqual (origObject, deserializedObject);
@@ -429,6 +424,5 @@ namespace Rx_Tests
             var rxvar = new RxVar<bool>("true");
             Assert.True(rxvar);
         }
-        
     }
 }

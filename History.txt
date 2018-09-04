@@ -1,4 +1,16 @@
 =====================================================
+v1.1.8
+
+1) Add support for Json Flat serialization (see other package Rx.Net.Plus.Json)
+2) Optimize code 
+
+=====================================================
+v1.1.7
+
+1) Add support for Json Flat serialization (see other package Rx.Net.Plus.Json)
+2) Optimize code 
+
+=====================================================
 v1.1.6
 
 1) Add support for serialization

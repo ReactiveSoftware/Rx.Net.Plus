@@ -5,37 +5,96 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rx.Net.Plus", "Source\Rx.Net.Plus.csproj", "{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RxVar.Testing", "Test\RxVar.Testing.csproj", "{FDC955CE-F0F3-4723-933C-C1D6DA950203}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rx.Net.Plus.Testing", "Test\Rx.Net.Plus.Testing.csproj", "{FDC955CE-F0F3-4723-933C-C1D6DA950203}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6F59C9F5-B910-4109-9BB9-17A152DF061B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{6F59C9F5-B910-4109-9BB9-17A152DF061B}"
 	ProjectSection(SolutionItems) = preProject
-		BuildNugetPackage.bat = BuildNugetPackage.bat
 		History.txt = History.txt
 		License.md = License.md
 		Logo.jpg = Logo.jpg
-		Nugetdoc.md = Nugetdoc.md
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rx.Net.Plus", "Rx.Net.Plus", "{E377CA0D-59BE-43C7-9651-0817E9112EB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Json Flat", "Json Flat", "{83B12783-A459-4FDE-A3B8-0D623A30D72F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{8CE5717F-2984-441A-A572-E508B662C508}"
+	ProjectSection(SolutionItems) = preProject
+		BuildNugetPackage.bat = BuildNugetPackage.bat
+		Nugetdoc.md = Nugetdoc.md
 		Rx.Net.Plus.nuspec = Rx.Net.Plus.nuspec
 		Rx.Net.Plus.png = Rx.Net.Plus.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rx.Net.Plus.Json", "Json Flat\Source\Rx.Net.Plus.Json.csproj", "{FD690203-1177-4022-A51F-D048260C40EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rx.Net.Plus.Json.Testing", "Json Flat\Test\Rx.Net.Plus.Json.Testing.csproj", "{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{F47F63C8-37E9-4ABD-AD38-FBB2A8AAED05}"
+	ProjectSection(SolutionItems) = preProject
+		Json Flat\BuildNugetPackage.bat = Json Flat\BuildNugetPackage.bat
+		Json Flat\nuget.exe = Json Flat\nuget.exe
+		Json Flat\Rx.Net.Plus.Json.nuspec = Json Flat\Rx.Net.Plus.Json.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E53A14F0-1E97-42CB-87FE-86DB508FF32A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{297FDEEB-6544-46F2-83C7-78FB55111C1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Debug|x64.Build.0 = Debug|Any CPU
 		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Release|x64.ActiveCfg = Release|Any CPU
+		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2}.Release|x64.Build.0 = Release|Any CPU
 		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Debug|x64.ActiveCfg = Debug|x64
+		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Debug|x64.Build.0 = Debug|x64
 		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Release|x64.ActiveCfg = Release|x64
+		{FDC955CE-F0F3-4723-933C-C1D6DA950203}.Release|x64.Build.0 = Release|x64
+		{FD690203-1177-4022-A51F-D048260C40EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD690203-1177-4022-A51F-D048260C40EE}.Release|x64.Build.0 = Release|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Debug|x64.Build.0 = Debug|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Release|x64.ActiveCfg = Release|Any CPU
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{91F833D5-2780-4A9E-B6A6-7A2AC16E27D2} = {E377CA0D-59BE-43C7-9651-0817E9112EB1}
+		{FDC955CE-F0F3-4723-933C-C1D6DA950203} = {297FDEEB-6544-46F2-83C7-78FB55111C1D}
+		{8CE5717F-2984-441A-A572-E508B662C508} = {E377CA0D-59BE-43C7-9651-0817E9112EB1}
+		{FD690203-1177-4022-A51F-D048260C40EE} = {83B12783-A459-4FDE-A3B8-0D623A30D72F}
+		{1FA0A8F2-DD64-4FA2-996D-9686810EE8EA} = {E53A14F0-1E97-42CB-87FE-86DB508FF32A}
+		{F47F63C8-37E9-4ABD-AD38-FBB2A8AAED05} = {83B12783-A459-4FDE-A3B8-0D623A30D72F}
+		{E53A14F0-1E97-42CB-87FE-86DB508FF32A} = {83B12783-A459-4FDE-A3B8-0D623A30D72F}
+		{297FDEEB-6544-46F2-83C7-78FB55111C1D} = {E377CA0D-59BE-43C7-9651-0817E9112EB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C542E0BC-5BD4-4D4B-A665-12CC4A920A1A}

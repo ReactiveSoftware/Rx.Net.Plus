@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<package>
+  <metadata>
+    <id>Rx.Net.Plus.Json</id>
+    <version>1.0.0</version>
+    <title>Json Extension to Rx.Net.Plus</title>
+    <authors>Reactive Software</authors>
+    <owners>Reactive Software</owners>
+    <licenseUrl>https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/master/License.md</licenseUrl>
+    <projectUrl>https://github.com/ReactiveSoftware/Rx.Net.Plus</projectUrl>
+    <iconUrl>https://rxsw.files.wordpress.com/2018/07/rx-net-plus1.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Extension to Rx.Net.Plus to support Json flat serialization</description>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>Copyright 2018, Reactive Software</copyright>
+    <tags>System.Reactive Reactive Json Rx.Net.Plus rx-main</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="11.0.2"></dependency>
+      <dependency id="Rx.Net.Plus" version="1.1.7"></dependency>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Source\bin\Release\Rx.Net.Plus.Json.dll" target="lib\net46"></file>
+  </files>
+</package>

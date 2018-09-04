@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
-<package >
+
+<package>
   <metadata>
     <id>Rx.Net.Plus</id>
-    <version>1.1.6</version>
+    <version>1.1.8</version>
     <title>ReactiveX Variables</title>
     <authors>Reactive Software</authors>
     <owners>Reactive Software</owners>
     <licenseUrl>https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/master/License.md</licenseUrl>
-	  <projectUrl>https://github.com/ReactiveSoftware/Rx.Net.Plus</projectUrl>
-	  <iconUrl>https://rxsw.files.wordpress.com/2018/07/rx-net-plus1.png</iconUrl>
+    <projectUrl>https://github.com/ReactiveSoftware/Rx.Net.Plus</projectUrl>
+    <iconUrl>https://rxsw.files.wordpress.com/2018/07/rx-net-plus1.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Rx.Net variables library. Provide reactiveness to variables. See readme for more details</description>
     <releaseNotes>First release</releaseNotes>
     <copyright>Copyright 2018, Reactive Software</copyright>
-    <tags>Reactive, Variable, WPF, .NET, Property, MVVM, NotifyPropertyChanged, Caliburn, LINQ, Events, Rx, Extensions, Observable</tags>
+    <tags>System.Reactive Reactive rx-main async types var WPF Property MVVM NotifyPropertyChanged Caliburn Events Rx.net</tags>
     <dependencies>
-      <dependency id="System.Reactive" version="3.0.0"></dependency>
-      <dependency id="" version="3.0.0"></dependency>
+      <dependency id="System.Reactive" version="4.1.0"></dependency>
     </dependencies>
   </metadata>
   <files>
-    <file src="Source\bin\Release\Rx.Net.Plus.dll" target="lib"></file>
+    <file src="Source\bin\Release\Rx.Net.Plus.dll" target="lib\net46"></file>
   </files>
 </package>

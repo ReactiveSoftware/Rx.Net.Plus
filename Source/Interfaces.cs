@@ -14,7 +14,12 @@ namespace Rx.Net.Plus
         bool IsDisposed { get; }
     }
 
-    public interface IRxVar<T> : ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
+    public interface IAsObject
+    {
+        object AsObject { get; }
+    }
+
+    public interface IRxVar<T> : IAsObject, ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
     {
         /// <summary>
         /// Distinct mode indicates that only when a distinct value is
