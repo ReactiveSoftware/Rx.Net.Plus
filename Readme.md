@@ -10,6 +10,9 @@
     - [Serialization](#serialization)
     - [Limitations](#limitations)
 - [RxProperty](#rxproperty-for-WPF)
+    - [Introduction](#introduction)
+    - [How to do?](#How-to-do?)
+    - [Example](#example)
 - [Extension Methods](#extension-methods)
 - [Nuget](#nuget)
 - [License](#license)
@@ -265,33 +268,15 @@ number.Set (10);
 
 ### RxProperty for WPF
 
+#### Introduction
+
 **Rx.Net.Plus** also provides means to leverage RxVar to WPF.
 
 The name of class to use for properties is: **RxProperty** and it is directly derived from RxVar.
 
-For instance:
+#### How to do?
 
-```c#
-public class ViewModel :  IPropertyChangedProxy
-{
-	public RxProperty IsFunctionEnabled { get; } = false.ToRxProperty();
-	public RxProperty Counter { get; }
-	public RxProperty Message { get; }
-}
-```
-
-and in XAML:
-
-```XML
-<CheckBox  IsChecked="{Binding IsFunctionEnabled}"/>
-<TextBox   Text="{Binding Counter}"/>
-<TextBox   Text="{Binding Message}"/>
-```
-
-Notes:
-
-1. **Rx.Net.Plus** supports ***TwoWay*** binding mode (where target can update source as for CheckBox).
-2. Binding is specified directly to property name (and not to its Value - although it is also allowed).
+##### Step 1: Implement *IPropertyChangedProxy* in View Model
 
 For *data binding* **of RxProperty** to work as expected,  the view model shall implement a dedicated interface named *IPropertyChangedProxy*.
 
@@ -304,9 +289,9 @@ void IPropertyChangedProxy.NotifyPropertyChanged(PropertyChangedEventArgs eventA
 }
 ```
 
-Binding shall occur after the view is created and bound to view model.
+Binding shall occur **after** the view has been created and bound to view model.
 
-In *Caliburn* framework, this occurs within the OnViewAttached method as following:
+In *Caliburn* framework for instance, this could occur inside the OnViewAttached method as following:
 
 ```c#
 class ViewModel : Screen, IPropertyChangedProxy
@@ -319,7 +304,64 @@ class ViewModel : Screen, IPropertyChangedProxy
 }
 ```
 
-In classic MVVM or other frameworks (like Prism, MVVM Light...), call to BindRxPropertiesToView can be handled in Loaded event handler.
+In classic code-behind MVVM or other frameworks (like Prism, MVVM Light...), call to BindRxPropertiesToView can be handled in Loaded event handler.
+
+##### Step 2: Define properties in View model
+
+```c#
+public class ViewModel :  IPropertyChangedProxy
+{
+	public RxProperty<bool>		IsFunctionEnabled { get; } = false.ToRxProperty();
+	public RxProperty<int> 		Counter { get; }
+	public RxProperty<string>	Message { get; }
+}
+```
+
+##### Step 3: Binding in XAML
+
+```XML
+<CheckBox  IsChecked="{Binding IsFunctionEnabled}"/>
+<TextBox   Text="{Binding Counter}"/>
+<TextBox   Text="{Binding Message}"/>
+```
+
+Notes:
+
+1. **Rx.Net.Plus** supports ***TwoWay*** binding mode (where target can update source as for CheckBox).
+2. Binding is specified directly to property name (and not to its Value - although it is allowed).
+
+#### Example
+
+The following code is a full implementation example. It relies on Caliburn but as stated above it is easy to implement in other frameworks or code-behind MVVM.
+
+```c#
+public class ViewModel :  IPropertyChangedProxy, Screen
+{
+	public RxProperty<bool>		IsFunctionEnabled { get; } = false.ToRxProperty();
+	public RxProperty<int> 		Counter { get; }
+	public RxProperty<string>	Message { get; }
+
+	public ViewModel()
+    {
+    	IObservable<int> counter = IOC.GetSessionCounter();
+    	Counter = counter.ToRxPropertyAndSubscribe();
+    	
+    	IObservable<string> errorMessage = IOC.GetErrorMessage();
+    	Message = errorMessage.Select (msg => $"Session#{Counter} an error occured: {msg}").ToRxPropertyAndSubscribe();
+    }
+	
+	void IPropertyChangedProxy.NotifyPropertyChanged(PropertyChangedEventArgs eventArgs)
+	{
+		OnPropertyChanged (eventArgs);
+	}
+	
+	protected override void OnViewAttached(object view, object context)
+    {
+        base.OnViewAttached(view, context);
+        this.BindRxPropertiesToView (view);			// Bind RxProperties to view
+    }
+}
+```
 
 ### Extension Methods
 
