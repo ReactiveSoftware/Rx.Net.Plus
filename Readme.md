@@ -8,7 +8,7 @@
     - [Distinct mode](#distinct-mode)
     - [Disposing](#disposing)
     - [Serialization](#serialization)
-    - [Json Flat Serialization](#Json-Flat-Serialization)
+    - [Json Flat Serialization](#json-flat-serialization)
     - [Limitations](#limitations)
 - [RxProperty for WPF](#rxproperty-for-WPF)
     - [Purpose](#purpose)
@@ -40,7 +40,7 @@ What do we mean? We would like to:
 
 Hence, we could state that **Rx.Net.Plus** will lead to the following formula:
 
-	**Rx.Net.Plus** =  **Rx.Net** + **Observers** + classic (**pull model**) c# semantics.
+​          **Rx.Net.Plus** =  **Rx.Net** + **Observers** + classic (**pull model**) c# semantics.
 
 **Rx.Net.Plus** is a small but smart library which introduces **two** new types for this purpose (+ several extension methods):
 
