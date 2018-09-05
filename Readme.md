@@ -283,9 +283,9 @@ public class ViewModel :  IPropertyChangedProxy
 and in XAML:
 
 ```XML
-< CheckBox  IsChecked="{Binding IsFunctionEnabled}"/>
-< TextBox   Text="{Binding Counter}"/>
-< TextBox   Text="{Binding Message}"/>
+<CheckBox  IsChecked="{Binding IsFunctionEnabled}"/>
+<TextBox   Text="{Binding Counter}"/>
+<TextBox   Text="{Binding Message}"/>
 ```
 
 Notes:
