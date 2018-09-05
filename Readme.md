@@ -8,10 +8,11 @@
     - [Distinct mode](#distinct-mode)
     - [Disposing](#disposing)
     - [Serialization](#serialization)
+    - [Json Flat Serialization](#Json-Flat-Serialization)
     - [Limitations](#limitations)
-- [RxProperty](#rxproperty-for-WPF)
-    - [Introduction](#introduction)
-    - [How to do?](#How-to-do?)
+- [RxProperty for WPF](#rxproperty-for-WPF)
+    - [Purpose](#purpose)
+    - [How to do](#How-to-do)
     - [Example](#example)
 - [Extension Methods](#extension-methods)
 - [Nuget](#nuget)
@@ -39,7 +40,7 @@ What do we mean? We would like to:
 
 Hence, we could state that **Rx.Net.Plus** will lead to the following formula:
 
-​	**Rx.Net.Plus** =  **Rx.Net** + **Observers** + classic (**pull model**) c# semantics.
+	**Rx.Net.Plus** =  **Rx.Net** + **Observers** + classic (**pull model**) c# semantics.
 
 **Rx.Net.Plus** is a small but smart library which introduces **two** new types for this purpose (+ several extension methods):
 
@@ -236,11 +237,80 @@ rxVar.ListenTo (observable);
 
 The following fields are serialized: ***Value, IsDistinct.***
 
-For Json flat serialization (serialize only value without title), a dedicated Nuget package is available. refer below for Nuget packages.
+#### Json Flat Serialization
 
-In order to use this feature, you have to:
+What is Json *"flat"*  serialization? 
 
-- [ ] Add a reference to Rx.Net.Plus.Json package.
+let's give an example. The following is part of the Test module in the solution.
+
+```c#
+    public class Info
+    {
+        public string Title { get; set; } = "Mr";
+        public double Height { get; set; } = 76.5;
+    }
+
+
+    public class User
+    {
+        public RxVar<string> Name = "John".ToRxVar();
+        public RxVar<bool> IsMale = true.ToRxVar();
+        public RxVar<int> Age = 16.ToRxVar();
+        public RxVar<Info> InfoUser = new Info().ToRxVar();
+
+        public User()
+        {
+            Name.IsDistinctMode = false;
+        }
+    }
+```
+
+
+
+Normal Json serialization will output:
+
+```json
+{
+  "Name": {
+    "IsDistinctMode": false,
+    "Value": "John"
+  },
+  "IsMale": {
+    "IsDistinctMode": true,
+    "Value": true
+  },
+  "Age": {
+    "IsDistinctMode": true,
+    "Value": 16
+  },
+  "InfoUser": {
+    "IsDistinctMode": true,
+    "Value": {
+      "Title": "Mr",
+      "Height": 76.5
+    }
+  }
+```
+
+With flat serialization:
+
+```json
+{
+  "Name": "John",
+  "IsMale": true,
+  "Age": 16,
+  "InfoUser": {
+    "Title": "Mr",
+    "Height": 76.5
+  }
+}
+```
+
+Json flat serialization is available through a dedicated [Nuget](https://www.nuget.org/packages/Rx.Net.Plus.Json/) package.
+
+In order to apply flat serialization, follow these steps:
+
+- [ ] Add a reference to *Rx.Net.Plus.Json* package.
 
 - [ ] Call once the following method to apply this serialization style:
 
@@ -268,13 +338,13 @@ number.Set (10);
 
 ### RxProperty for WPF
 
-#### Introduction
+#### Purpose
 
 **Rx.Net.Plus** also provides means to leverage RxVar to WPF.
 
 The name of class to use for properties is: **RxProperty** and it is directly derived from RxVar.
 
-#### How to do?
+#### How to do
 
 ##### Step 1: Implement *IPropertyChangedProxy* in View Model
 
