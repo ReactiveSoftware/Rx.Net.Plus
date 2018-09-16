@@ -35,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{F47F63C8
 	ProjectSection(SolutionItems) = preProject
 		Json Flat\BuildNugetPackage.bat = Json Flat\BuildNugetPackage.bat
 		Json Flat\nuget.exe = Json Flat\nuget.exe
+		Json Flat\Nugetdoc.md = Json Flat\Nugetdoc.md
 		Json Flat\Rx.Net.Plus.Json.nuspec = Json Flat\Rx.Net.Plus.Json.nuspec
 	EndProjectSection
 EndProject

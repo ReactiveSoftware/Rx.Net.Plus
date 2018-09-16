@@ -5,6 +5,8 @@
 - [Introduction](#introduction)
 - [RxVar](#rxvar)
     - [Basics](#basics)
+    - [Comparison](#comparison)
+    - [Boolean Operators](#boolean-operators)
     - [Distinct mode](#distinct-mode)
     - [Disposing](#disposing)
     - [Serialization](#serialization)
@@ -189,6 +191,24 @@ RxVar implements the following interfaces:
 ISubject, IConvertible, IDisposable, IComparable, IEquatable, ISerializable
 ```
 
+#### Comparison
+
+By default, **RxVar** uses for its comparisons the default comparer of the generic type used
+
+```C#
+Comparer<T>.Default
+```
+
+In case a specific comparer is needed, RxVar provides the **SetComparer** method to specify it.
+
+#### Boolean Operators
+
+**RxVar** has the following 'pseudo' boolean operators: **True, False, Not** for comparison
+
+```C#
+if (isConnected.Not) equivalent if (! isConnected)
+```
+
 #### Distinct mode
 
 By default, **RxVar** propagates its data (on new value assignment) only when a new **distinct** value is set.
@@ -310,9 +330,9 @@ Json flat serialization is available through a dedicated [Nuget](https://www.nug
 
 In order to apply flat serialization, follow these steps:
 
-- [ ] Add a reference to *Rx.Net.Plus.Json* package.
+1. Add a reference to *Rx.Net.Plus.Json* package.
 
-- [ ] Call once the following method to apply this serialization style:
+2. Call once the following method to apply this serialization style:
 
   ```C#
   RxVarFlatJsonExtensions.RegisterToJsonGlobalSettings();
@@ -435,19 +455,40 @@ public class ViewModel :  IPropertyChangedProxy, Screen
 
 ### Extension Methods
 
-| Method                             | Description                                                  | Usage                                                        |
-| ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ***RedirectTo***                   | an alias of *Subscribe*                                      | `rxVar.RedirectTo(rxVar2)`                                   |
-| ***Notify***                       | an alias of *Subscribe*                                      | `rxVar.Notify(rxVar2)`                                       |
-| ***When***(value)                  | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.When(true).Notify (rxVar2)`                           |
-| ***If*** (value),                  | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.If (10).Notify (rxVar2)`                              |
-| ***IfNot*** (value)                | equivalent to*Where* (v => false == v.Equals(value))         | `rxVar.IfNot (5).Notify (rxVar2)`                            |
-| ***ToRxVar***                      | creates an *instance* of **RxVar** of the type of **var**    | `var rxVar = 10.ToRxVar()`                                   |
-| ***ToRxVarAndSubscribe***          | creates an instance of RxVar of the same type of **observable source** and subscribe the new instance to **source** | `IObservable<int> obs; var rxvar = obs.Where(v => v > 10).ToRxVarAndSubscribe();` |
-| ***ToRxProperty***                 | creates an *instance* of **RxProperty** of the type of **var** | `RxProperty<int> Counter => 10.ToRxProperty();`              |
-| ***ToRxPropertyAndSubscribe***     | creates an instance of RxProperty of the same type of **observable source** and subscribe the new instance to **source** | `rxvar.ToRxPropertyAndSubscribe();`                          |
-| ***BindRxPropertiesToView***       | bind the rxproperties of the view model *vm* (which implements *IPropertyChangedProxy*) to the view. | `this.BindRxPropertiesToView(view)`                          |
-| ***True***, ***False***, ***Not*** | pseudo attributes may be used as replacement for *(var == true*, *var == false*) | `isConnected.True,   isConnected.False,  isConnected.Not`    |
+#### Subscription
+
+| Method           | Description             | Usage                      |
+| ---------------- | ----------------------- | :------------------------- |
+| ***RedirectTo*** | an alias of *Subscribe* | `rxVar.RedirectTo(rxVar2)` |
+| ***Notify***     | an alias of *Subscribe* | `rxVar.Notify(rxVar2)`     |
+
+
+
+#### Conditional data propagation
+
+| Method                                                       | Description                                                  | Usage                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | :----------------------------------------- |
+| ***When***(value)                                            | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.When(true).Notify (rxVar2)`         |
+| ***If*** (value)                                             | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.If (10).Notify (rxVar2)`            |
+| **IfNot** (value)                                            | equivalent to*Where* (v => false == v.Equals(value))         | `rxVar.IfNot (5).Notify (rxVar2)`          |
+| **IfEqualTo, IfNotEqualTo, IfLessThan, IfLessThanOrEqualTo, IfGreaterThan, IfGreaterThanOrEqualTo** | Comparison 'operators': <, <=, >, >=                         | `rxVar.IfGreaterThan (5).Notify (rxVar2)`  |
+| **IfInRange, IfInStrictRange, IfOutOfRange, IfOutOfStrictRange** | IfInRange(a,b): a <= value <= b                                    IfInStrictRange(a,b): a < value < b                            IfOutOfRange(a,b):  value <= a OR value >= b                IfOutOfStrictRange(a,b): value < a OR  b < value | `rxVar.IfInRange(5,7).Notify (rxVar2)`     |
+| **Clip**                                                     | Clip(min,max) force value to be in range {min,max}           | `sensorReading.Clip(0,200).Notify(screen)` |
+
+#### Instantiation and subscription
+
+| Method                         | Description                                                  | Usage                                                        |
+| ------------------------------ | ------------------------------------------------------------ | :----------------------------------------------------------- |
+| ***ToRxVar***                  | creates an *instance* of **RxVar** of the type of **var**    | `var rxVar = 10.ToRxVar()`                                   |
+| ***ToRxVarAndSubscribe***      | creates an instance of RxVar of the same type of **observable source** and subscribe the new instance to **source** | `IObservable<int> obs; var rxvar = obs.Where(v => v > 10).ToRxVarAndSubscribe();` |
+| ***ToRxProperty***             | creates an *instance* of **RxProperty** of the type of **var** | `RxProperty<int> Counter => 10.ToRxProperty();`              |
+| ***ToRxPropertyAndSubscribe*** | creates an instance of RxProperty of the same type of **observable source** and subscribe the new instance to **source** | `rxvar.ToRxPropertyAndSubscribe();`                          |
+
+#### MVVM
+
+| Method                       | Description                                                  | Usage                                |
+| ---------------------------- | ------------------------------------------------------------ | :----------------------------------- |
+| ***BindRxPropertiesToView*** | Bind the RxProperties of the view model *vm* (which implements *IPropertyChangedProxy*) to the view.an alias of *Subscribe* | `this.BindRxPropertiesToView (view)` |
 
 ### Nuget
 

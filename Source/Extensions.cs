@@ -39,6 +39,53 @@ namespace Rx.Net.Plus
         public static IObservable<T> IfNot<T>(this IObservable<T> src, T v) where T : IComparable<T>
             => src.Where(v1 => !v1.Equals(v));
 
+        public static IObservable<T> IfEqualTo<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => v1.Equals(v));
+
+        public static IObservable<T> IfNotEqualTo<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => !v1.Equals(v));
+
+        public static IObservable<T> IfLessThan<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => v1.CompareTo(v) < 0);
+
+        public static IObservable<T> IfLessThanOrEqualTo<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => v1.CompareTo(v) <= 0);
+
+        public static IObservable<T> IfGreaterThan<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => v1.CompareTo(v) > 0);
+
+        public static IObservable<T> IfGreaterThanOrEqualTo<T>(this IObservable<T> src, T v) where T : IComparable<T>
+            => src.Where(v1 => v1.CompareTo(v) >= 0);
+
+        public static IObservable<T> IfInRange<T>(this IObservable<T> src, T min, T max) where T : IComparable<T>
+            => src.Where(val => val.CompareTo(min) >= 0 && val.CompareTo(max) <= 0);
+
+        public static IObservable<T> IfInStrictRange<T>(this IObservable<T> src, T min, T max) where T : IComparable<T>
+            => src.Where(val => val.CompareTo(min) > 0 && val.CompareTo(max) < 0);
+
+        public static IObservable<T> IfOutOfRange<T>(this IObservable<T> src, T min, T max) where T : IComparable<T>
+            => src.Where(val => val.CompareTo(min) <= 0 || val.CompareTo(max) >= 0);
+
+        public static IObservable<T> IfOutOfStrictRange<T>(this IObservable<T> src, T min, T max) where T : IComparable<T>
+            => src.Where(val => val.CompareTo(min) < 0 || val.CompareTo(max) > 0);
+
+        public static IObservable<T> Clip<T>(this IObservable<T> src, T min, T max) where T : IComparable<T>
+            => src.Select(val =>
+            {
+                if (val.CompareTo(min) < 0)
+                {
+                    return min;
+                }
+                else if (val.CompareTo(max) > 0)
+                {
+                    return max;
+                }
+                else
+                {
+                    return val;
+                }
+            });
+
         #endregion
 
         #region RxVar Instantation from other types (including subscription)
@@ -84,28 +131,34 @@ namespace Rx.Net.Plus
 
     public abstract class DisposableBaseClass : IDisposableBaseClass
     {
-        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-       
-        public CancellationTokenSource CTS => _cts;
-
-        public CancellationToken CancellationToken => CTS.Token;
-
+        private CancellationTokenSource _cts = new CancellationTokenSource();
         private bool _isDisposed = false;
+
+        public CancellationTokenSource CTS => _cts;
+        public CancellationToken CancellationToken => CTS.Token;
         public bool IsDisposed => _isDisposed;
 
         //Implement IDisposable.
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (false == IsDisposed)
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
         }
 
         protected virtual void OnDisposing(bool isDisposing)
         {
-            CTS.Cancel();
+            if (null != _cts)
+            {
+                CTS.Cancel();
+                CTS.Dispose();
+                _cts = null;
+            }
         }
 
-        protected virtual void Dispose(bool isDisposing)
+        private void Dispose(bool isDisposing)
         {
             if (false == IsDisposed)
             {
@@ -114,8 +167,9 @@ namespace Rx.Net.Plus
             }
         }
 
-        #region Serialization
-
-        #endregion
+        ~DisposableBaseClass()
+        {
+            Dispose(false);
+        }
     }
 }

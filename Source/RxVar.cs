@@ -59,7 +59,7 @@ namespace Rx.Net.Plus
     {
         #region Fields
 
-        private readonly BehaviorSubject<T> _subject;
+        private BehaviorSubject<T> _subject;
         private readonly IObservable<T> _observable;
         private IComparer<T> _comparer = Comparer<T>.Default;
 
@@ -414,7 +414,12 @@ namespace Rx.Net.Plus
         protected override void OnDisposing(bool isDisposing)
         {
             base.OnDisposing(isDisposing);
-            _subject.Dispose();
+
+            if (_subject != null)
+            {
+                _subject.Dispose();
+                _subject = null;
+            }
         }
 
         #endregion
