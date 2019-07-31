@@ -255,7 +255,7 @@ namespace Rx.Net.Plus
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString() ?? String.Empty;
         }
 
         #endregion
