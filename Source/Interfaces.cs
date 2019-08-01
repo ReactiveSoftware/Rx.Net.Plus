@@ -19,21 +19,31 @@ namespace Rx.Net.Plus
         object AsObject { get; }
     }
 
-    public interface IRxVar<T> : IAsObject, ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
+    public interface IReadOnlyRxVar<T> : IAsObject, ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
     {
         /// <summary>
         /// Distinct mode indicates that only when a distinct value is
         /// set to RxVar it is dispatched to observers
         /// Default value is true => Distinct mode is applied
         /// </summary>
-        bool IsDistinctMode { get; set; }
-        
-        T Value { get; set; }
-        T Set(T v);
-
+        bool IsDistinctMode { get; }
+        T Value { get; }
         // Alias to Subscribe
         void ListenTo(IObservable<T> observable);
     }
+
+    public interface IRxVar<T> : IReadOnlyRxVar<T>
+    {
+        /// <summary>
+        /// Distinct mode indicates that only when a distinct value is
+        /// set to RxVar it is dispatched to observers
+        /// Default value is true => Distinct mode is applied
+        /// </summary>
+        new bool IsDistinctMode { get; set; }
+        new T Value { get; set; }
+        T Set(T v);
+    }
+    
 
     public interface IPropertyChangedProxy
     {

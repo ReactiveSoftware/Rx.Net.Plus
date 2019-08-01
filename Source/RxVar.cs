@@ -83,7 +83,7 @@ namespace Rx.Net.Plus
         {
             _subject = new BehaviorSubject<T>(v);
             _observable = _subject;
-            IsDistinctMode = true;  
+            IsDistinctMode = true;
         }
 
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace Rx.Net.Plus
         /// Create a new instance of RxVar and connect it to another source
         /// </summary>
         /// <param name="source"> RxVar source </param>
-        public RxVar(IObservable<T> source) : this(default (T))
+        public RxVar(IObservable<T> source) : this(default(T))
         {
             source.Subscribe(this, CancellationToken);
         }
@@ -132,7 +132,7 @@ namespace Rx.Net.Plus
                 {
                     _subject.TryGetValue(out retValue);
                 }
-                
+
                 return retValue;
             }
 
@@ -145,13 +145,14 @@ namespace Rx.Net.Plus
         {
             observable.Subscribe(this, CancellationToken);
         }
-        public void RedirectTo (IObserver<T> observer)
-            => _observable.Subscribe (observer, CancellationToken);
+
+        public void RedirectTo(IObserver<T> observer)
+            => _observable.Subscribe(observer, CancellationToken);
 
         public void Notify(IObserver<T> observer)
             => _observable.Subscribe(observer, CancellationToken);
 
-        public void Notify (Action<T> onNext)
+        public void Notify(Action<T> onNext)
             => _observable.Subscribe(onNext, CancellationToken);
 
         #endregion
@@ -196,10 +197,8 @@ namespace Rx.Net.Plus
         public static bool operator ==(RxVar<T> left, RxVar<T> right)
         {
             return ReferenceEquals(left, null)
-                ? 
-                    ReferenceEquals(right, null)
-                : 
-                    left.Equals(right);
+                ? ReferenceEquals(right, null)
+                : left.Equals(right);
         }
 
         public static bool operator !=(RxVar<T> left, RxVar<T> right)
@@ -215,15 +214,13 @@ namespace Rx.Net.Plus
         public static bool operator ==(RxVar<T> left, T right)
         {
             return ReferenceEquals(left, null)
-                ?
-                    ReferenceEquals(right, null)
-                :
-                    left.Value.Equals (right);
+                ? ReferenceEquals(right, null)
+                : left.Value.Equals(right);
         }
 
         public static bool operator !=(RxVar<T> left, T right)
         {
-            return ! (left == right);
+            return !(left == right);
         }
 
         public static bool operator >(RxVar<T> left, T right)
@@ -242,7 +239,7 @@ namespace Rx.Net.Plus
 
             return left.CompareTo(right) < 0;
         }
-        
+
         public static bool operator <=(RxVar<T> left, T right)
         {
 
@@ -255,7 +252,7 @@ namespace Rx.Net.Plus
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString() ?? "null";
         }
 
         #endregion
@@ -310,13 +307,13 @@ namespace Rx.Net.Plus
 
         public int CompareTo(T other)
         {
-            return _comparer.Compare (Value, other);
+            return _comparer.Compare(Value, other);
         }
 
         #endregion
 
         #region IAsObject interface
-        
+
         object IAsObject.AsObject => (object) Value;
 
         #endregion
@@ -385,7 +382,7 @@ namespace Rx.Net.Plus
 
         string IConvertible.ToString(IFormatProvider provider)
         {
-            return Value.ToString();
+            return Value?.ToString() ?? String.Empty;
         }
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)
@@ -407,6 +404,7 @@ namespace Rx.Net.Plus
         {
             return Convert.ToUInt64(Value);
         }
+
         #endregion
 
         #region IDisposable Support
@@ -426,16 +424,16 @@ namespace Rx.Net.Plus
 
         #region ISerializable
 
-        public RxVar (SerializationInfo info, StreamingContext context) : this(default(T))
+        public RxVar(SerializationInfo info, StreamingContext context) : this(default(T))
         {
-            IsDistinctMode = (bool) info.GetValue ("IsDistinctMode", typeof(bool));
-            Value = (T) info.GetValue ("Value", typeof(T));
+            IsDistinctMode = (bool) info.GetValue("IsDistinctMode", typeof(bool));
+            Value = (T) info.GetValue("Value", typeof(T));
         }
 
-        public void GetObjectData (SerializationInfo info, StreamingContext context)
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue ("IsDistinctMode", IsDistinctMode);
-            info.AddValue ("Value", Value);
+            info.AddValue("IsDistinctMode", IsDistinctMode);
+            info.AddValue("Value", Value);
         }
 
         #endregion

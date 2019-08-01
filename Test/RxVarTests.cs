@@ -37,6 +37,18 @@ namespace Rx_Tests
             Assert.AreEqual(rxVar, 20);
         }
 
+
+        [Test]
+        public void TestReadonlyRxVar()
+        {
+            var rxVar = 10.ToRxVar();
+            var roRxVar = (IReadOnlyRxVar<int>) rxVar;
+            rxVar.Value = 20;
+            var val = roRxVar;
+            Assert.AreEqual(val, 20);
+        }
+
+
         [Test]
         public void TestToRxExtensionFromRxVar()
         {

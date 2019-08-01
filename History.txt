@@ -1,4 +1,11 @@
 =====================================================
+v1.1.10
+
+1) Fix bug in ToString when used with RxVar holding null value
+2) Add IReadOnlyRxVar (similar to ReadonlyList concept)
+3) Add IgnoreNull in Extensions
+
+=====================================================
 v1.1.9
 
 1) Fix potential bug in OnDisposing methods

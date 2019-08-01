@@ -30,6 +30,15 @@ namespace Rx.Net.Plus
 
         #region Rx Filtering and Comparison
 
+        /// <summary>
+        /// Ignore null elements
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        public static IObservable<T> IgnoreNull<T>(this IObservable<T> src) where T : class
+            => src.Where(v => v != null);
+
         public static IObservable<T> When<T>(this IObservable<T> src, T v) where T : IComparable<T>
             => src.Where(v1 => v1.Equals(v));
 
@@ -95,10 +104,10 @@ namespace Rx.Net.Plus
 
         /// <summary>
         /// Create a new instance of RxVar from another one
-        /// and connect the new to the source
+        /// and connect the new to the src
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source"> a source RxVar</param>
+        /// <param name="src"> a src RxVar</param>
         /// <returns> A new connected RxVar </returns>
         public static RxVar<T> ToRxVarAndSubscribe<T>(this IObservable<T> source) 
             => new RxVar<T>(source);
@@ -112,10 +121,10 @@ namespace Rx.Net.Plus
 
         /// <summary>
         /// Create a new instance of RxProperty from another RxVar
-        /// and connect the new to the source
+        /// and connect the new to the src
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source"> a source RxVar</param>
+        /// <param name="src"> a src RxVar</param>
         /// <returns> A new connected RxVar </returns>
         public static RxProperty<T> ToRxPropertyAndSubscribe<T>(this IObservable<T> source)
             => new RxProperty<T>(source);
