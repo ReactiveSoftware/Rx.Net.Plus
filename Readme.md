@@ -185,6 +185,12 @@ class SystemInfo
    }
 ```
 
+
+
+Note that ***RxVar*** behaves exactly as a classic variable. Therefore, as for classic variable, **in case it is not initialized** the value will be the default, ***RxVar*** will also publish the default value **on subscription**.
+
+One option is to use the `IgnoreNull`* extension to avoid receiving the null value, or use `Skip(1)` to skip first value.
+
 RxVar implements the following interfaces:
 
 ```c#
@@ -222,6 +228,21 @@ IsDistinctMode
 ```
 
 **Note**: *distinct mode* may be changed at any time even after subscription of observers.
+
+#### IReadOnlyRxVar
+
+**RxVar** can be published as read-only, similarly to `IReadOnlyList` concept for arrays.
+
+This allows using of RxVar to be used without caring of being modified outside.
+
+```C#
+var rxVar = 10.ToRxVar();
+var roRxVar = (IReadOnlyRxVar<int>) rxVar;
+roRxVar.Value = 30;		// Won't compile !!!
+rxVar.Value = 20;		// Compile
+var val = roRxVar;		// val is equal to 20
+
+```
 
 #### Disposing
 
@@ -468,6 +489,7 @@ public class ViewModel :  IPropertyChangedProxy, Screen
 
 | Method                                                       | Description                                                  | Usage                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | :----------------------------------------- |
+| ***IgnoreNull***                                             | equivalent to*Where* (v => v != null)                        | `rxVar.IgnoreNull().Notify (rxVar2)`       |
 | ***When***(value)                                            | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.When(true).Notify (rxVar2)`         |
 | ***If*** (value)                                             | equivalent to*Where* (v => v.Equals(value))                  | `rxVar.If (10).Notify (rxVar2)`            |
 | **IfNot** (value)                                            | equivalent to*Where* (v => false == v.Equals(value))         | `rxVar.IfNot (5).Notify (rxVar2)`          |
