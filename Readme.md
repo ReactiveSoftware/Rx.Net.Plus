@@ -8,6 +8,7 @@
     - [Comparison](#comparison)
     - [Boolean Operators](#boolean-operators)
     - [Distinct mode](#distinct-mode)
+    - [IReadOnlyRxVar](#IReadOnlyRxVar)
     - [Disposing](#disposing)
     - [Serialization](#serialization)
     - [Json Flat Serialization](#json-flat-serialization)
