@@ -245,6 +245,8 @@ var val = roRxVar;		// val is equal to 20
 
 ```
 
+Note that IReadOnlyRxVar is not disposable. It will avoid risky situations where read-only client may destroy RxVar source !
+
 #### Disposing
 
 **Rx.Net.Plus** provides a base class which implements *IDisposable*, called ***DisposableBaseClass***.

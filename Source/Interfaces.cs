@@ -19,7 +19,7 @@ namespace Rx.Net.Plus
         object AsObject { get; }
     }
 
-    public interface IReadOnlyRxVar<T> : IAsObject, ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, IDisposable, ISerializable
+    public interface IReadOnlyRxVar<T> : IAsObject, ISubject<T>, IComparable<T>, IEquatable<T>, IConvertible, ISerializable
     {
         /// <summary>
         /// Distinct mode indicates that only when a distinct value is
@@ -32,7 +32,7 @@ namespace Rx.Net.Plus
         void ListenTo(IObservable<T> observable);
     }
 
-    public interface IRxVar<T> : IReadOnlyRxVar<T>
+    public interface IRxVar<T> : IReadOnlyRxVar<T>, IDisposable
     {
         /// <summary>
         /// Distinct mode indicates that only when a distinct value is
