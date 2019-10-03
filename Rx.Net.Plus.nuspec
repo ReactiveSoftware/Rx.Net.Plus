@@ -13,7 +13,7 @@
     <iconUrl>https://rxsw.files.wordpress.com/2018/07/rx-net-plus1.png</iconUrl>
     <description>Ultimate Rx.Net extension. Turn primitive variable to be reactive ! Refer to readme for more details and examples</description>
     <releaseNotes>Refer to site</releaseNotes>
-    <copyright>Copyright 2018, Reactive Software</copyright>
+    <copyright>Copyright 2019, Reactive Software</copyright>
     <tags>System.Reactive Reactive Primitive rx-main async types var WPF UI Property MVVM NotifyPropertyChanged Caliburn Events Rx.net</tags>
     <dependencies>
       <dependency id="System.Reactive" version="4.1.0"></dependency>
@@ -21,6 +21,7 @@
   </metadata>
   <files>
     <file src="Source\bin\Release\Rx.Net.Plus.dll" target="lib\net46"></file>
+    <file src="Source\bin\Release\Rx.Net.Plus.pdb" target="lib\net46"></file>
     <file src="License\license.txt" target="" />
   </files>
 </package>

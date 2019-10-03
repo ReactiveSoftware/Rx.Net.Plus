@@ -2,6 +2,7 @@
 v1.1.11
 
 1) IReadOnlyRxVar is not longer IDisposable as it is risky and actually does not make sense
+2) Add the .pdb file in the NuGet
 
 =====================================================
 v1.1.10
