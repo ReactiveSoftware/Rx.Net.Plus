@@ -8,7 +8,7 @@
     - [Comparison](#comparison)
     - [Boolean Operators](#boolean-operators)
     - [Distinct mode](#distinct-mode)
-    - [IReadOnlyRxVar](#IReadOnlyRxVar)
+    - [ReadOnlyRxVar](#ReadOnlyRxVar)
     - [Disposing](#disposing)
     - [Serialization](#serialization)
     - [Json Flat Serialization](#json-flat-serialization)
@@ -22,7 +22,7 @@
 - [License](#license)
 - [Contact](#contact-us)
 
-### Introduction
+## **Introduction**
 
 ReactiveX gains popularity and is widely used in several platforms and languages.
 
@@ -52,7 +52,7 @@ Hence, we could state that **Rx.Net.Plus** will lead to the following formula:
 | ***RxVar***      | supersede basic types (as int, bool...)                      |
 | ***RxProperty*** | Support of MVVM to replace view-model *properties* (*NotifyPropertyChanged* pattern) |
 
-### RxVar
+## **RxVar**
 
 #### Basics
 
@@ -230,22 +230,22 @@ IsDistinctMode
 
 **Note**: *distinct mode* may be changed at any time even after subscription of observers.
 
-#### IReadOnlyRxVar
+#### ReadOnlyRxVar 
 
 **RxVar** can be published as read-only, similarly to `IReadOnlyList` concept for arrays.
 
 This allows using of RxVar to be used without caring of being modified outside.
 
-```C#
+```c#
 var rxVar = 10.ToRxVar();
-var roRxVar = (IReadOnlyRxVar<int>) rxVar;
+var roRxVar = rxVar.ToReadOnlyRxVar();
 roRxVar.Value = 30;		// Won't compile !!!
 rxVar.Value = 20;		// Compile
 var val = roRxVar;		// val is equal to 20
 
 ```
 
-Note that IReadOnlyRxVar is not disposable. It will avoid risky situations where read-only client may destroy RxVar source !
+Notice the usage of `ToReadOnlyRxVar()` extension to transform the `RxVar` to `ReadOnlyRxVar`.
 
 #### Disposing
 
@@ -255,14 +255,9 @@ Note that IReadOnlyRxVar is not disposable. It will avoid risky situations where
 
 This is very convenient as there no need to handle IDisposable...when subscribing RxVar to observables.
 
-The following methods utilize the automatic unsubscription
+The following method utilizes automatic un-subscription
 
-
-
-- ListenTo(IObservable<T> observable)
-- RedirectTo (IObserver<T> observer)
-- Notify(IObserver<T> observer)
-- Notify (Action<T> onNext)
+- `ListenTo(IObservable<T> observable)`
 
 ```c#
 // Classic style
@@ -294,8 +289,7 @@ let's give an example. The following is part of the Test module in the solution.
         public double Height { get; set; } = 76.5;
     }
 
-
-    public class User
+	public class User
     {
         public RxVar<string> Name = "John".ToRxVar();
         public RxVar<bool> IsMale = true.ToRxVar();
@@ -364,7 +358,7 @@ In order to apply flat serialization, follow these steps:
 
 #### Limitations
 
-As C# variables are reference, assigning <u>directly</u> to RxVar is impossible (because it would replace the referenced RxVar itself with another one!)
+As C# variables are reference type, assigning <u>directly</u> to RxVar is impossible (because it would replace the referenced RxVar itself with another one!)
 
 Therefore the following notation is disallowed:
 
@@ -377,10 +371,11 @@ Instead, *RxVar* provides the following semantics:
 
 ```c#
 number.Value = 10;
+or
 number.Set (10);
 ```
 
-### RxProperty for WPF
+## **RxProperty for WPF**
 
 #### Purpose
 

@@ -1,4 +1,17 @@
 =====================================================
+v1.1.12
+
+1) Revise IReadonlyRxVar to allow usage with same semantics of RxVar (except changing value)
+   => Add a ReadOnlyRxVar class which read-only mirrors the RxVar source variable
+   Now ReadOnlyRxVar can be used as follow:
+     var readonlyRxVar = ...;
+	 if (readonlyRxVar > 10)		....
+
+   in previous versions, only ReadOnlyRxVar.Value syntax was available.
+   Add ToReadOnlyRxVar which is similar to ToObservable extension.
+ 2) Improvements and several minor bug fixes
+
+=====================================================
 v1.1.11
 
 1) IReadOnlyRxVar is not longer IDisposable as it is risky and actually does not make sense

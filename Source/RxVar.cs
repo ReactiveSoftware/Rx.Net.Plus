@@ -5,32 +5,7 @@ using System.Runtime.Serialization;
 
 namespace Rx.Net.Plus
 {
-    internal static class ConversionHelper
-    {
-        public static T ConvertTo<T>(this object value)
-        {
-            // Get the type that was made nullable.
-            var valueType = Nullable.GetUnderlyingType(typeof(T));
-
-            if (valueType != null)
-            {
-                // Nullable type.
-                if (value == null)
-                {
-                    return default(T);
-                }
-                else
-                {
-                    return (T) Convert.ChangeType(value, valueType);
-                }
-            }
-            else
-            {
-                // Not nullable.
-                return (T) Convert.ChangeType(value, typeof(T));
-            }
-        }
-    }
+#pragma warning disable CS0660, CS0661
 
 
     /// <summary>
@@ -55,12 +30,14 @@ namespace Rx.Net.Plus
 #pragma warning disable CS0660, CS0661
 
     [Serializable]
-    public class RxVar<T> : DisposableBaseClass, IRxVar<T>
+    public class RxVar<T> :
+        DisposableBaseClass, 
+        IRxVar<T>,
+        IReadOnlyRxVar<T>
     {
         #region Fields
 
         private BehaviorSubject<T> _subject;
-        private readonly IObservable<T> _observable;
         private IComparer<T> _comparer = Comparer<T>.Default;
 
         #endregion
@@ -82,7 +59,6 @@ namespace Rx.Net.Plus
         public RxVar(T v)
         {
             _subject = new BehaviorSubject<T>(v);
-            _observable = _subject;
             IsDistinctMode = true;
         }
 
@@ -146,15 +122,6 @@ namespace Rx.Net.Plus
             observable.Subscribe(this, CancellationToken);
         }
 
-        public void RedirectTo(IObserver<T> observer)
-            => _observable.Subscribe(observer, CancellationToken);
-
-        public void Notify(IObserver<T> observer)
-            => _observable.Subscribe(observer, CancellationToken);
-
-        public void Notify(Action<T> onNext)
-            => _observable.Subscribe(onNext, CancellationToken);
-
         #endregion
 
         #region Equatable
@@ -171,7 +138,7 @@ namespace Rx.Net.Plus
 
         public bool Equals(T other)
         {
-            return this.Value.Equals(other);
+            return Value?.Equals(other) ?? other == null;
         }
 
         public override bool Equals(object other)
@@ -191,7 +158,7 @@ namespace Rx.Net.Plus
 
         public override int GetHashCode()
         {
-            return (this.Value.GetHashCode() * 397 ^ this.IsDisposed.GetHashCode());
+            return (Value.GetHashCode() * 397 ^ IsDisposed.GetHashCode());
         }
 
         public static bool operator ==(RxVar<T> left, RxVar<T> right)
@@ -225,7 +192,6 @@ namespace Rx.Net.Plus
 
         public static bool operator >(RxVar<T> left, T right)
         {
-
             return left.CompareTo(right) > 0;
         }
 
@@ -249,7 +215,6 @@ namespace Rx.Net.Plus
         #endregion
 
         #region Object class
-
         public override string ToString()
         {
             return Value?.ToString() ?? "null";
@@ -261,7 +226,7 @@ namespace Rx.Net.Plus
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
-            return _observable.Subscribe(observer);
+            return _subject.Subscribe(observer);
         }
 
         #endregion
@@ -274,7 +239,7 @@ namespace Rx.Net.Plus
 
             if (IsDistinctMode)
             {
-                if (value.Equals(Value))
+                if ( Equals(value))
                 {
                     publishValue = false;
                 }
@@ -314,7 +279,7 @@ namespace Rx.Net.Plus
 
         #region IAsObject interface
 
-        object IAsObject.AsObject => (object) Value;
+        public object AsObject => (object) Value;
 
         #endregion
 
@@ -325,82 +290,82 @@ namespace Rx.Net.Plus
             return TypeCode.Object;
         }
 
-        bool IConvertible.ToBoolean(IFormatProvider provider)
+        public bool ToBoolean(IFormatProvider provider)
         {
             return Convert.ToBoolean(Value);
         }
 
-        byte IConvertible.ToByte(IFormatProvider provider)
+		public byte ToByte(IFormatProvider provider)
         {
             return Convert.ToByte(Value);
         }
 
-        char IConvertible.ToChar(IFormatProvider provider)
+		public char ToChar(IFormatProvider provider)
         {
             return Convert.ToChar(Value);
         }
 
-        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+		public DateTime ToDateTime(IFormatProvider provider)
         {
             return Convert.ToDateTime(Value);
         }
 
-        decimal IConvertible.ToDecimal(IFormatProvider provider)
+		public decimal ToDecimal(IFormatProvider provider)
         {
             return Convert.ToDecimal(Value);
         }
 
-        double IConvertible.ToDouble(IFormatProvider provider)
+		public double ToDouble(IFormatProvider provider)
         {
             return Convert.ToDouble(Value);
         }
 
-        short IConvertible.ToInt16(IFormatProvider provider)
+		public short ToInt16(IFormatProvider provider)
         {
             return Convert.ToInt16(Value);
         }
 
-        int IConvertible.ToInt32(IFormatProvider provider)
+		public int ToInt32(IFormatProvider provider)
         {
             return Convert.ToInt32(Value);
         }
 
-        long IConvertible.ToInt64(IFormatProvider provider)
+		public long ToInt64(IFormatProvider provider)
         {
             return Convert.ToInt64(Value);
         }
 
-        sbyte IConvertible.ToSByte(IFormatProvider provider)
+		public sbyte ToSByte(IFormatProvider provider)
         {
             return Convert.ToSByte(Value);
         }
 
-        float IConvertible.ToSingle(IFormatProvider provider)
+		public float ToSingle(IFormatProvider provider)
         {
             return Convert.ToSingle(Value);
         }
 
-        string IConvertible.ToString(IFormatProvider provider)
+		public string ToString(IFormatProvider provider)
         {
             return Value?.ToString() ?? String.Empty;
         }
 
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+		public object ToType(Type conversionType, IFormatProvider provider)
         {
             return Convert.ChangeType(Value, conversionType);
         }
 
-        ushort IConvertible.ToUInt16(IFormatProvider provider)
+		public ushort ToUInt16(IFormatProvider provider)
         {
             return Convert.ToUInt16(Value);
         }
 
-        uint IConvertible.ToUInt32(IFormatProvider provider)
+		public uint ToUInt32(IFormatProvider provider)
         {
             return Convert.ToUInt32(Value);
         }
 
-        ulong IConvertible.ToUInt64(IFormatProvider provider)
+		public ulong ToUInt64(IFormatProvider provider)
         {
             return Convert.ToUInt64(Value);
         }
@@ -424,7 +389,7 @@ namespace Rx.Net.Plus
 
         #region ISerializable
 
-        public RxVar(SerializationInfo info, StreamingContext context) : this(default(T))
+        protected RxVar(SerializationInfo info, StreamingContext context) : this(default(T))
         {
             IsDistinctMode = (bool) info.GetValue("IsDistinctMode", typeof(bool));
             Value = (T) info.GetValue("Value", typeof(T));
