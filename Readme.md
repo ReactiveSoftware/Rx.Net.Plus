@@ -238,14 +238,20 @@ This allows using of RxVar to be used without caring of being modified outside.
 
 ```c#
 var rxVar = 10.ToRxVar();
-var roRxVar = rxVar.ToReadOnlyRxVar();
+var roRxVar = (IReadOnlyRxVar<int>)rxVar;
 roRxVar.Value = 30;		// Won't compile !!!
 rxVar.Value = 20;		// Compile
-var val = roRxVar;		// val is equal to 20
+var val = roRxVar.Value;		// val is equal to 20
 
 ```
 
-Notice the usage of `ToReadOnlyRxVar()` extension to transform the `RxVar` to `ReadOnlyRxVar`.
+Rx.Net.Plus also offers a `ToReadOnlyRxVar` (similar to `ToReadOnlyList` method) method to convert a rw RxVar to a read-only RxVar which allows regular variable syntax:
+
+```c#
+var rxVar = 10.ToRxVar();
+var roRxVar = rxVar.ToReadOnlyRxVar();
+Assert.True(roRxVar > 5);		// This syntax is unavailable when using IReadOnlyRxVar<int> casting
+```
 
 #### Disposing
 
