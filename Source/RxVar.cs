@@ -377,12 +377,8 @@ namespace Rx.Net.Plus
         protected override void OnDisposing(bool isDisposing)
         {
             base.OnDisposing(isDisposing);
-
-            if (_subject != null)
-            {
-                _subject.Dispose();
-                _subject = null;
-            }
+            
+            _subject?.Dispose();
         }
 
         #endregion
