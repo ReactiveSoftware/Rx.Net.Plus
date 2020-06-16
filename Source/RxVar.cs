@@ -89,6 +89,11 @@ namespace Rx.Net.Plus
 
         public static implicit operator T(RxVar<T> v) // implicit digit to byte conversion operator
         {
+            if (v.IsDisposed)
+            {
+                throw new ObjectDisposedException($"{v.GetType().FullName}");
+            }
+            
             return v._subject.Value;
         }
 
@@ -107,6 +112,10 @@ namespace Rx.Net.Plus
                 if (!IsDisposed)
                 {
                     _subject.TryGetValue(out retValue);
+                }
+                else
+                {
+                    throw new ObjectDisposedException($"{GetType().FullName}");
                 }
 
                 return retValue;
@@ -226,6 +235,11 @@ namespace Rx.Net.Plus
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException($"{GetType().FullName}");
+            }
+
             return _subject.Subscribe(observer);
         }
 
@@ -235,6 +249,11 @@ namespace Rx.Net.Plus
 
         public virtual void OnNext(T value)
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException($"{GetType().FullName}");
+            }
+
             bool publishValue = true;
 
             if (IsDistinctMode)
@@ -253,11 +272,21 @@ namespace Rx.Net.Plus
 
         public void OnError(Exception error)
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException($"{GetType().FullName}");
+            }
+
             _subject.OnError(error);
         }
 
         public void OnCompleted()
         {
+            if (IsDisposed)
+            {
+                throw new ObjectDisposedException($"{GetType().FullName}");
+            }
+
             _subject.OnCompleted();
         }
 

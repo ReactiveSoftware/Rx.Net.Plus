@@ -121,6 +121,25 @@ namespace Rx_Tests
             Assert.True(rxVar1.Equals((object) false));
         }
 
+        enum Example
+        {
+            Example1,
+            Example2,
+            Example3
+        }
+
+        
+        [Test]
+        public void ObjectsTest()
+        {
+            var rxVar1 = Example.Example1.ToRxVar();
+
+            object var1 = rxVar1;
+            //bool isEqual = ((bool)var1) == true;
+            var v = Convert.ChangeType(var1, typeof(Example));
+            bool isEqual = (Example)v  == Example.Example1;
+        }
+
         [Test]
         public void EqualsOperatorWithValue()
         {
@@ -251,10 +270,17 @@ namespace Rx_Tests
 
             Assert.True(rxVarRecipient.IsDisposed);
 
-            rxVar.Value ^= true;
-
-            Assert.True(counterRecipient == 2); // Since  rxVarRecipient is disposed
-            Assert.True(counter == 3);
+            try
+            {
+                rxVar.Value ^= true;
+                rxVarRecipient.Value ^= true;
+                Assert.Fail("Object shall throw ObjectDisposedException !!");
+            }
+            catch (ObjectDisposedException)
+            {
+                Assert.True(counterRecipient == 2); // Since  rxVarRecipient is disposed
+                Assert.True(counter == 3);
+            }
         }
 
         [Test]
