@@ -522,7 +522,7 @@ Rx.Net.Plus packages are available at [Nuget](https://www.nuget.org/packages?q=r
 
 ### License
 
-Refer to [license](https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/master/License.md)
+Refer to [license](https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/master/License/License.txt)
 
 ### Contact us
 
