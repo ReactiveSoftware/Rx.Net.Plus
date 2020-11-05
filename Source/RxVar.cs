@@ -103,11 +103,11 @@ namespace Rx.Net.Plus
 
         public bool IsDistinctMode { get; set; }
 
-        public T Value
+        public virtual T Value
         {
             get
             {
-                T retValue = default(T);
+                T retValue;
 
                 if (!IsDisposed)
                 {

@@ -1,4 +1,11 @@
 =====================================================
+v1.1.14
+
+ObjectDisposedException is not thrown within RxProperty
+as it may undesirable conditions at application exit
+(due to Windows Messages Purging Process)
+
+=====================================================
 v1.1.13
 
 ObjectDisposedException is thrown in many places in

@@ -37,7 +37,14 @@ namespace Rx.Net.Plus
         // implicit digit to byte conversion operator
         public static implicit operator T(RxProperty<T> v)
         {
-            return v.Value; // implicit conversion
+            if (!v.IsDisposed)
+            {
+                return v.Value; // implicit conversion
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         public void BindToView(IPropertyChangedProxy parent, string propertyName)
@@ -46,10 +53,30 @@ namespace Rx.Net.Plus
             _eventArgs = new PropertyChangedEventArgs(propertyName);
         }
 
+
+        public override T Value
+        {
+            get => IsDisposed ? base.Value : default(T);
+            set => OnNext(value);
+        }
+
         public override void OnNext(T value)
         {
-            base.OnNext(value);
-            _parent?.NotifyPropertyChanged(_eventArgs);
+            if (!IsDisposed)
+            {
+                base.OnNext(value);
+                _parent?.NotifyPropertyChanged(_eventArgs);
+            }
+        }
+        
+        public override int GetHashCode()
+        {
+            if (IsDisposed)             // To avoid exceptio o f
+            {
+                return 1118;   // Guematria Shema
+            }
+
+            return (Value.GetHashCode() * 397);
         }
     }
 }
