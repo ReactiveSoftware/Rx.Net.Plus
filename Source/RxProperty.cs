@@ -37,14 +37,12 @@ namespace Rx.Net.Plus
         // implicit digit to byte conversion operator
         public static implicit operator T(RxProperty<T> v)
         {
-            if (!v.IsDisposed)
-            {
-                return v.Value; // implicit conversion
-            }
-            else
+            if (v.IsDisposed)
             {
                 return default(T);
             }
+
+            return v.Value; // implicit conversion
         }
 
         public void BindToView(IPropertyChangedProxy parent, string propertyName)
@@ -56,7 +54,7 @@ namespace Rx.Net.Plus
 
         public override T Value
         {
-            get => IsDisposed ? base.Value : default(T);
+            get => IsDisposed ? default(T) : base.Value;
             set => OnNext(value);
         }
 
@@ -71,7 +69,7 @@ namespace Rx.Net.Plus
         
         public override int GetHashCode()
         {
-            if (IsDisposed)             // To avoid exceptio o f
+            if (IsDisposed)
             {
                 return 1118;   // Guematria Shema
             }

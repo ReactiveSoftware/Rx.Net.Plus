@@ -1,4 +1,9 @@
 =====================================================
+v1.1.15
+
+Fix a bug in RxProperty
+
+=====================================================
 v1.1.14
 
 ObjectDisposedException is not thrown within RxProperty

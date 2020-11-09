@@ -528,4 +528,4 @@ Refer to [license](https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/master/L
 
 For any comments, suggestions, bugs...please contact us at [reactivesw@outlook.com](mailto:reactivesw@outlook.com)
 
-![](Logo.jpg)
+![](Images\Logo.jpg)

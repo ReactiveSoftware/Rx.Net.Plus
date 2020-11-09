@@ -10,4 +10,4 @@ Refer to [Readme file](https://github.com/ReactiveSoftware/Rx.Net.Plus/blob/mast
 
 For any comment, suggestion...please contact us at [reactivesw@outlook.com](mailto:reactivesw@outlook.com)
 
-![](Logo.jpg)
+![](..\Images\Logo.jpg)

@@ -33,7 +33,6 @@ namespace Rx.Net.Plus
             if (null != _cts)
             {
                 CTS.Cancel();
-                CTS.Dispose();
                 _cts = null;
             }
         }
